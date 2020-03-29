@@ -1,0 +1,1642 @@
+{% extends "templates/web.html" %}
+
+{% block page_sidebar %}
+{% include "templates/pages/web_sidebar.html" %}
+{% endblock %}
+{% block page_content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+</style>
+
+<body>
+
+
+
+   
+    <!-- Tagihan Keluar -->
+    <div class="modal fade" id="satu" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"aria-hidden="true">
+        <div class="modal-dialog" role="document" style="width:770px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="exampleModalLabel">Tagihan Keluar (Sales Invoice) </h5>
+                </div>
+                <div class="modal-body">
+                    <canvas id="tagihan" height="700" width="1000"></canvas>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pembayaran -->
+    <div class="modal fade" id="dua" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width:770px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="exampleModalLabel">Pembayaran (Purchase Invoice) </h5>
+            </div>
+            <div class="modal-body">
+                <canvas id="pembayaran" height="700" width="1000"></canvas>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+    </div>
+    
+    <!-- Big 5 Customer -->
+    <div class="modal fade" id="tiga" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width:770px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="exampleModalLabel">Big 5 Customer</h5>
+            </div>
+            <div class="modal-body">
+                <canvas id="bigCustomer" height="9000" width="10000"></canvas>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Bank -->
+    <div class="modal fade" id="empat" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width:770px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="exampleModalLabel">Bank</h5>
+            </div>
+            <div class="modal-body">
+                <canvas id="bank" height="700" width="1000"></canvas>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Pendapatan -->
+    <div class="modal fade" id="enam" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width:770px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="exampleModalLabel">Pendapatan </h5>
+            </div>
+            <div class="modal-body">
+                <canvas id="pendapatan" height="700" width="1000"></canvas>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Biaya -->
+    <div class="modal fade" id="lima" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document" style="width:770px;">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 id="exampleModalLabel"> </h5>
+              </div>
+             
+              <table border="0" >
+                <h6 class="text-center"> <b>Biaya</b></h6>
+                <div class="col-md-4">
+                    <tr>
+                        <th width="200" style="font-size: 15px; color: blue;"> 
+                          Biaya Beban
+                        </th>
+
+                        <th style="font-size: 15px; text-align:right; color: blue;"">
+                            <p id="date_prev"></p> 
+                            </th>
+
+
+                        <th style="font-size: 15px; text-align:right; color: blue;"">
+                        <p id="date"></p> 
+                        </th>
+                        </tr>
+                        <br>
+            
+                        <tr>
+                        <td style="font-size: 15px;">
+                            Biaya Penjualan
+                        </td>
+
+                        <td style="font-size: 15px; text-align: right;">
+                            Rp. {{total_biaya_prev[0]}}
+                        </td>
+                        
+                        <td style="font-size: 15px; text-align: right;">
+                            Rp. {{total_biaya[0]}}
+                        </td>
+                        </tr>
+            
+                        <tr>
+                            <td style="font-size: 15px;">
+                                Biaya Gaji
+                            </td>
+
+                            <td style="font-size: 15px; text-align: right;">
+                                Rp. {{total_biaya_prev[1]}}
+                            </td>
+
+                            <td style="font-size: 15px; text-align: right;">
+                                Rp. {{total_biaya[1]}}
+                            </td>
+                        </tr>
+                            
+                        
+                        <tr>
+                            <td style="font-size: 15px;">
+                                Biaya Kantor
+                            </td>
+
+                            <td style="font-size: 15px; text-align: right;">
+                                Rp. {{total_biaya_prev[2]}}
+                            </td>
+                                
+                            <td style="font-size: 15px; text-align: right;">
+                                Rp. {{total_biaya[2]}}
+                            </td>
+                        </tr>
+            
+                            
+                        <tr>
+                            <td style="font-size: 15px;">
+                                Biaya Gaji Indirect
+                            </td>
+
+                            <td style="font-size: 15px; text-align: right;">
+                                Rp. {{total_biaya_prev[3]}}
+                            </td>
+                                
+                            <td style="font-size: 15px; text-align: right;">
+                                Rp. {{total_biaya[3]}}
+                            </td>
+                        </tr>
+            
+                            
+                        <tr>
+                            <td style="font-size: 15px;">
+                                Biaya Operational
+                            </td>
+
+                            <td style="font-size: 15px; text-align: right;">
+                                Rp. {{total_biaya_prev[4]}}
+                            </td>
+                                
+                            <td style="font-size: 15px; text-align: right;">
+                                Rp. {{total_biaya[4]}}
+                            </td>
+                        </tr>
+            
+                            
+                        <tr>
+                            <td style="font-size: 15px;">
+                                Biaya Kantor Indirect
+                            </td>
+
+                            <td style="font-size: 15px; text-align: right;">
+                                Rp. {{total_biaya_prev[5]}}
+                            </td>
+                                
+                            <td style="font-size: 15px; text-align: right;">
+                                Rp. {{total_biaya[5]}}
+                            </td>
+                        </tr>
+            
+                            
+                        <tr>
+                            <td style="font-size: 15px;">
+                                Biaya Penyusutan
+                            </td>
+
+                            <td style="font-size: 15px; text-align: right;">
+                                Rp. {{total_biaya_prev[6]}}
+                            </td>
+                                
+                            <td style="font-size: 15px; text-align: right;">
+                                Rp. {{total_biaya[6]}}
+                            </td>
+                        </tr>
+            
+                            
+                        <tr>
+                            <td style="font-size: 15px;">
+                                Biaya Amortisasi
+                            </td>
+
+                            <td style="font-size: 15px; text-align: right;">
+                                Rp. {{total_biaya_prev[7]}}
+                            </td>
+                                
+                            <td style="font-size: 15px; text-align: right;">
+                                Rp. {{total_biaya[7]}}
+                            </td>
+                        </tr>
+            
+                            
+                        <tr>
+                            <td style="font-size: 15px;">
+                                Biaya Lain Lain
+                            </td>
+
+                            <td style="font-size: 15px; text-align: right;">
+                                Rp. {{total_biaya_prev[8]}}
+                            </td>
+                                
+                            <td style="font-size: 15px; text-align: right;">
+                                Rp. {{total_biaya[8]}}
+                            </td>
+                        </tr>
+                             
+               
+                </table>
+
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Employee -->
+    <div class="modal fade" id="tujuh" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width:770px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="exampleModalLabel">Empployee </h5>
+            </div>
+            <div class="modal-body">
+                <canvas id="employee" height="700" width="1000"></canvas>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Pendapatan Beban -->
+    <div class="modal fade" id="delapan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"aria-hidden="true">
+        <div class="modal-dialog" role="document" style="width:770px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="exampleModalLabel">Bank</h5>
+                </div>
+                <div class="modal-body">
+                    <canvas id="pendapatanbeban" height="700" width="1000"></canvas>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+        </div>
+
+    <!-- Row Chart Minimize -->
+   <div class="container">
+    <div class="row" style="border:1px solid">
+        <!-- Tagihan Keluar -->
+        <a data-toggle="modal" data-target="#satu" ></a>
+            <div class="col-md-4">
+            <a data-toggle="modal" data-target="#satu" > <h6 class="text-center"><b>Tagihan Keluar (Sales Invoice)</b></h6></a>
+                 <canvas id="tagihan1" height="400" width="700"  data-toggle="modal" data-target="#satu"></canvas>
+            </div>
+        </a>
+        
+        <!-- Pembayaran -->
+        <a data-toggle="modal" data-target="#dua" ></a>
+        <div class="col-md-4">
+            <a data-toggle="modal" data-target="#dua" > <h6 class="text-center"><b>Pembayaran (Purchase Invoice)</b></h6></a>
+                 <canvas id="pembayaran1" height="400" width="700"  data-toggle="modal" data-target="#dua"></canvas>
+        </div>
+        </a>
+
+        <!-- Employee -->
+        <a data-toggle="modal" data-target="#tujuh" ></a>
+        <div class="col-md-4">
+            <a data-toggle="modal" data-target="#tujuh" > <h6 class="text-center"><b>Employee</b></h6></a>
+                    <canvas id="employee1" height="400" width="700"  data-toggle="modal" data-target="#tujuh"></canvas>
+        </div>
+        </a>
+    
+    </div>
+   </div>
+
+    <hr>
+    <div class="container">
+    <div class="row" style="border:1px solid">
+    <!-- Bank -->
+    <a data-toggle="modal" data-target="#empat" ></a>
+    <div class="col-md-4">
+        <a data-toggle="modal" data-target="#empat" > <h6 class="text-center"><b>Bank</b></h6></a>
+                <canvas id="bank1" height="400" width="700"  data-toggle="modal" data-target="#empat"></canvas>
+    </div>
+    </a>
+    
+  <!-- pendapatan -->
+     <a data-toggle="modal" data-target="#enam" ></a>
+     <div class="col-md-4">
+         <a data-toggle="modal" data-target="#enam" > <h6 class="text-center"><b>Pendapatan</b></h6></a>
+              <canvas id="pendapatan1" height="400" width="700"  data-toggle="modal" data-target="#enam"></canvas>
+     </div>
+     </a>
+     <br>
+
+      <!-- Pendapatan Beban -->
+    <a data-toggle="modal" data-target="#delapan" ></a>
+    <div class="col-md-4">
+    <a data-toggle="modal" data-target="#delapan" > <h6 class="text-center"><b>Pendapatan Vs Beban</b></h6></a>
+            <canvas id="pendapatanbeban1" height="400" width="700"  data-toggle="modal" data-target="#delapan"></canvas>
+    </div>
+    </a>
+
+ 
+     </div>
+
+     <hr>
+     <div class="container">
+     <div class="row" style="border:1px solid">
+
+    <!-- Big 5 Customer -->
+    <a data-toggle="modal" data-target="#tiga" ></a>
+    <div class="col-md-6">
+        <a data-toggle="modal" data-target="#tiga" > <h6 class="text-center"><b>Big 5 Customer </b></h6></a>
+            <canvas id="bigCustomer1" height="400" width="700"  data-toggle="modal" data-target="#tiga"></canvas>
+    </div>
+    </a>
+
+    <!-- Biaya -->
+    <a data-toggle="modal" data-target="#lima">
+        <table border="0"  >
+            <h6 class="text-center"> <b>Biaya</b></h6>
+            <div class="col-md-8">
+                <tr>
+                    <th width="200" style="font-size: 15px; color: blue;"> 
+                      Biaya Beban
+                    </th>
+
+                    <th width="120" style="font-size: 15px; text-align:right; color: blue;"">
+                        <p id="date_2_prev"></p> 
+                        </th>
+
+
+                    <th width="200" style="font-size: 15px; text-align:right; color: blue;"">
+                        <p id="date2"></p>
+                    </th>
+                    </tr>
+                    <br>
+        
+                    <tr>
+                    <td style="font-size: 15px;">
+                        Biaya Penjualan
+                    </td>
+
+                    <td style="font-size: 15px; text-align: right;">
+                        Rp. {{total_biaya_prev[0]}}
+                    </td>
+                    
+                    <td style="font-size: 15px; text-align: right;">
+                        Rp. {{total_biaya[0]}}
+                    </td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-size: 15px;">
+                            Biaya Gaji
+                        </td>
+
+                        <td style="font-size: 15px; text-align: right;">
+                            Rp. {{total_biaya_prev[1]}}
+                        </td>
+
+                        <td style="font-size: 15px; text-align: right;">
+                            Rp. {{total_biaya[1]}}
+                        </td>
+                    </tr>
+                        
+                    
+                    <tr>
+                        <td style="font-size: 15px;">
+                            Biaya Kantor
+                        </td>
+
+                        <td style="font-size: 15px; text-align: right;">
+                            Rp. {{total_biaya_prev[2]}}
+                        </td>
+                            
+                        <td style="font-size: 15px; text-align: right;">
+                            Rp. {{total_biaya[2]}}
+                        </td>
+                    </tr>
+        
+                        
+                    <tr>
+                        <td style="font-size: 15px;">
+                            Biaya Gaji Indirect
+                        </td>
+
+                        <td style="font-size: 15px; text-align: right;">
+                            Rp. {{total_biaya_prev[3]}}
+                        </td>
+                            
+                        <td style="font-size: 15px; text-align: right;">
+                            Rp. {{total_biaya[3]}}
+                        </td>
+                    </tr>
+        
+                        
+                    <tr>
+                        <td style="font-size: 15px;">
+                            Biaya Operational
+                        </td>
+
+                        <td style="font-size: 15px; text-align: right;">
+                            Rp. {{total_biaya_prev[4]}}
+                        </td>
+                            
+                        <td style="font-size: 15px; text-align: right;">
+                            Rp. {{total_biaya[4]}}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-size: 15px;">
+                            Biaya Kantor Indirect
+                        </td>
+
+                        <td style="font-size: 15px; text-align: right;">
+                            Rp. {{total_biaya_prev[5]}}
+                        </td>
+                            
+                        <td style="font-size: 15px; text-align: right;">
+                            Rp. {{total_biaya[5]}}
+                        </td>
+                    </tr>
+        
+                        
+                    <tr>
+                        <td style="font-size: 15px;">
+                            Biaya Penyusutan
+                        </td>
+
+                        <td style="font-size: 15px; text-align: right;">
+                            Rp. {{total_biaya_prev[6]}}
+                        </td>
+                            
+                        <td style="font-size: 15px; text-align: right;">
+                            Rp. {{total_biaya[6]}}
+                        </td>
+                    </tr>
+        
+
+                    <tr>
+                        <td style="font-size: 15px;">
+                            
+                        </td>
+
+                        <td style="font-size: 15px; text-align: right;">
+                           
+                        </td>
+                            
+                        <td style="font-size: 15px; text-align: right;">
+                            <b>Lainnya..</b>
+                        </td>
+                    </tr>
+            </table>
+        </div>
+    </a>
+    
+    
+   
+      </div>
+     </div>
+      <hr>
+
+    </div>
+
+
+   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.5.0"></script>
+
+    <script>
+        var d = new Date();
+        var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    
+        document.getElementById("date").innerHTML = months[d.getMonth()]  + " " + 2020;;
+        document.getElementById("date_prev").innerHTML = months[d.getMonth() - 1]  + " " + 2020;;
+
+        document.getElementById("date2").innerHTML = months[d.getMonth()]  + " " + 2020;;
+        document.getElementById("date_2_prev").innerHTML = months[d.getMonth() - 1]  + " " + 2020;;
+    
+    </script>
+
+    {% block scripts %}
+
+    <!-- Tagihan Keluar  -->
+    <script>
+        var ctx = document.getElementById("tagihan");
+        var label_tagihankeluar = {{posting_date}};
+        var container_tagihankeluar = {{sales_invoice}};
+        // var label_tagihankeluar = ["22/11/2000", "24/11/2000", "25/11/2000", "26/11/20000", "28/11/2000"];
+        // var container_tagihankeluar = ["2000000", "1000000", "2500000", "500000", "3000000"];
+        var opt = { 
+                    scales: {
+                        xAxes: [{
+                            barPercentage: 0.5,
+                            barThickness: 35,
+                            maxBarThickness: 35,
+                            minBarLength: 2,
+                            gridLines: {
+                                offsetGridLines: true
+                            },
+                            ticks: {
+                                    fontSize: 15,
+                                    fontStyle: 'bold'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    plugins: {
+                        legend: false,
+                        title: false,
+                        datalabels: {
+                            align: 'top',
+                            anchor: 'end',
+                            color : 'black'
+                        }
+                    }
+                };
+
+        var tagihan = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: label_tagihankeluar,
+                datasets: [{
+                    label: 'Tagihan Keluar',
+                    data: container_tagihankeluar,
+                    backgroundColor: [
+                        'rgba(255,0,255,0.3)',
+                        'rgba(0, 0, 0, 0.5)',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(255,0,255,0.3)'
+                    ]
+                }]
+            },
+            options: opt
+        });
+    </script>
+
+    <!-- Tagihan Keluar Modal -->
+    <script>
+        var ctx = document.getElementById("tagihan1");
+        var label_tagihankeluar = {{posting_date}};
+        var container_tagihankeluar = {{sales_invoice}};
+        var opt = { 
+                    scales: {
+                        xAxes: [{
+                            barPercentage: 0.5,
+                            barThickness: 35,
+                            maxBarThickness: 35,
+                            minBarLength: 2,
+                            gridLines: {
+                                offsetGridLines: true
+                            },
+                            ticks: {
+                                    fontSize: 13,
+                                    fontStyle: 'bold'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    plugins: {
+                        legend: false,
+                        title: false,
+                        datalabels: {
+                            align: 'top',
+                            anchor: 'end',
+                            color : 'black'
+                        }
+                    }
+                };
+
+        var tagihan1 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: label_tagihankeluar,
+                datasets: [{
+                    label: 'Tagihan Keluar',
+                    data: container_tagihankeluar,
+                    backgroundColor: [
+                    'rgba(255,0,255,0.3)',
+                        'rgba(0, 0, 0, 0.5)',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(255,0,255,0.3)'
+                    ]
+                }]
+            },
+            options: opt
+        });
+    </script>
+
+    <!-- Pembayaran  -->
+    <script>
+        var ctx = document.getElementById('pembayaran1');
+        var label_pembayaran1 = {{posting_date_pi}};
+        var container_pembayaran1 = {{purchase_invoice}};
+        var opt = { 
+                    scales: {
+                        xAxes: [{
+                            barPercentage: 0.5,
+                            barThickness: 35,
+                            maxBarThickness: 35,
+                            minBarLength: 2,
+                            gridLines: {
+                                offsetGridLines: true
+                            },
+                            ticks: {
+                                    fontSize: 11,
+                                    fontStyle: 'bold'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: false
+                            }
+                        }]
+                    },
+                    plugins: {
+                        legend: false,
+                        title: false,
+                        datalabels: {
+                            align: 'top',
+                            anchor: 'end',
+                            color : 'black'
+                        }
+                    }
+                };
+
+        var pembayaran1 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: label_pembayaran1,
+                datasets: [{
+                    label: 'Pembayaran',
+                    data: container_pembayaran1,
+                    backgroundColor: [
+                        'rgba(0,255,0,0.3)',
+                        'rgba(0, 0, 0, 0.5)',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0,255,0,0.3)'
+
+                    ]
+                }]
+            },
+            options: opt
+        });
+    </script>
+
+    <!-- Pembayaran Modal -->
+    <script>
+        var ctx = document.getElementById('pembayaran');
+        var label_pembayaran = {{posting_date_pi}};
+        var container_pembayaran = {{purchase_invoice}};
+        var opt = { 
+                    scales: {
+                        xAxes: [{
+                            barPercentage: 0.5,
+                            barThickness: 20,
+                            maxBarThickness: 20,
+                            minBarLength: 2,
+                            gridLines: {
+                                offsetGridLines: true
+                            },
+                            ticks: {
+                                    fontSize: 11,
+                                    fontStyle: 'bold'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: false
+                            }
+                        }]
+                    },
+                    plugins: {
+                        legend: false,
+                        title: false,
+                        datalabels: {
+                            align: 'top',
+                            anchor: 'end',
+                            color : 'black',
+                            font : {
+                                size : "12"
+                            }
+                        }
+                    }
+                };
+
+        var pembayaran = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: label_pembayaran,
+                datasets: [{
+                    label: 'Pembayaran',
+                    data: container_pembayaran,
+                    backgroundColor: [
+                    'rgba(0,255,0,0.3)',
+                        'rgba(0, 0, 0, 0.5)',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0,255,0,0.3)'
+                    ]
+                }]
+            },
+            options: opt
+        });
+    </script>
+
+   <!-- Big 5 Customer  -->
+   <script>
+    var ctx = document.getElementById('bigCustomer');
+    var label_bigcustomer = {{customer}};
+    var container_bigcustomer = {{total_annual}};
+    var opt = { 
+                scales: {
+                    xAxes: [{
+                        barPercentage: 0.5,
+                        barThickness: 35,
+                        maxBarThickness: 35,
+                        minBarLength: 2,
+                        gridLines: {
+                            offsetGridLines: true
+                        },
+                        ticks: {
+                                fontSize: 8,
+                                fontStyle: 'bold'
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                plugins: {
+                    legend: false,
+                    title: false,
+                    datalabels: {
+                        align: 'start',
+                        anchor: 'end',
+                        color : 'black'
+                    }
+                }
+            };
+
+    var bigCustomer = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: label_bigcustomer,
+            datasets: [{
+                label: 'Big 5 Customer',
+                data: container_bigcustomer,
+                backgroundColor: [
+                    'rgba(255,193,7 ,1)',
+                    'rgba(233,30,99 ,1)',
+                    'rgba(0,188,212 ,1)',
+                    'rgba(0,255,0 ,1)',
+                    'rgba(0, 34, 230, 1)',
+                    'rgba(139,136,120 ,1)',
+                    'rgba(0,128,128 ,1)',
+                    'rgba(156,39,176 ,1)',
+                    'rgba(0,100,0 ,1)',
+                    'rgba(121,85,72 ,1)',
+                    'rgba(158,158,158 ,1)',
+                    'rgba(96,125,139 ,1)',
+                    'rgba(14, 14, 180, 1)',
+                    'rgba(196, 249, 170, 1)',
+                    'rgba(249, 170, 170, 1)'
+                ]
+            }]
+        },
+        options: opt
+    });
+   </script>
+
+    <!-- Big 5 Customer  Modal -->
+    <script>
+        var ctx = document.getElementById('bigCustomer1');
+        var label_bigcustomer = {{customer}};
+        var container_bigcustomer = {{total_annual}};
+        var opt = { 
+                    scales: {
+                        xAxes: [{
+                            barPercentage: 0.5,
+                            barThickness: 20,
+                            maxBarThickness: 20,
+                            minBarLength: 2,
+                            gridLines: {
+                                offsetGridLines: true
+                            },
+                            ticks: {
+                                    fontSize: 7,
+                                    fontStyle: 'bold'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    plugins: {
+                        legend: false,
+                        title: false,
+                        datalabels: {
+                            align: 'start',
+                            anchor: 'end',
+                            color : 'black',
+                            font : {
+                                size : "10"
+                            }
+                        }
+                    }
+                };
+
+        var bigCustomer1 = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: label_bigcustomer,
+                datasets: [{
+                    label: 'Big 5 Customer',
+                    data: container_bigcustomer,
+                    backgroundColor: [
+                        'rgba(255,193,7 ,1)',
+                        'rgba(233,30,99 ,1)',
+                        'rgba(0,188,212 ,1)',
+                        'rgba(0,255,0 ,1)',
+                        'rgba(0, 34, 230, 1)',
+                        'rgba(139,136,120 ,1)',
+                        'rgba(0,128,128 ,1)',
+                        'rgba(156,39,176 ,1)',
+                        'rgba(0,100,0 ,1)',
+                        'rgba(121,85,72 ,1)',
+                        'rgba(158,158,158 ,1)',
+                        'rgba(96,125,139 ,1)',
+                        'rgba(14, 14, 180, 1)',
+                        'rgba(196, 249, 170, 1)',
+                        'rgba(249, 170, 170, 1)'
+                    ]
+                }]
+            },
+            options: opt
+        });
+    </script>
+
+   <!-- Bank  -->
+    <script>
+        var ctx = document.getElementById('bank');
+        var label_bank = {{account_parent_bank}};
+        var container_bank1 = {{total_bank}};
+        var container_bank2 = {{total_bank_2019}};
+        var opt = { 
+                    scales: {
+                        xAxes: [{
+                            barPercentage: 0.5,
+                            barThickness: 35,
+                            maxBarThickness: 35,
+                            minBarLength: 2,
+                            gridLines: {
+                                offsetGridLines: true
+                            },
+                            ticks: {
+                                    fontSize: 6,
+                                    fontStyle: 'bold'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    plugins: {
+                        legend: false,
+                        title: false,
+                        datalabels: {
+                            align: 'top',
+                            anchor: 'end',
+                            color : 'black'
+                        }
+                    }
+                };
+
+        var bank = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: label_bank,
+                datasets: [{
+                    label: '2019',
+                    data: container_bank2,
+                    backgroundColor: [
+                        'rgba(255,193,7 ,1)',
+                        'rgba(233,30,99 ,1)',
+                        'rgba(0,188,212 ,1)',
+                        'rgba(0,255,0 ,1)',
+                        'rgba(0, 34, 230, 1)',
+                        'rgba(139,136,120 ,1)',
+                        'rgba(0,128,128 ,1)',
+                        'rgba(156,39,176 ,1)',
+                        'rgba(0,100,0 ,1)',
+                        'rgba(121,85,72 ,1)',
+                        'rgba(158,158,158 ,1)',
+                        'rgba(96,125,139 ,1)',
+                        'rgba(14, 14, 180, 1)',
+                        'rgba(196, 249, 170, 1)',
+                        'rgba(249, 170, 170, 1)'
+                    ]
+                },
+                {
+                    label: '2020',
+                    data: container_bank1,
+                    backgroundColor: [
+                        'rgba(255,193,7 ,1)',
+                        'rgba(233,30,99 ,1)',
+                        'rgba(0,188,212 ,1)',
+                        'rgba(0,255,0 ,1)',
+                        'rgba(0, 34, 230, 1)',
+                        'rgba(139,136,120 ,1)',
+                        'rgba(0,128,128 ,1)',
+                        'rgba(156,39,176 ,1)',
+                        'rgba(0,100,0 ,1)',
+                        'rgba(121,85,72 ,1)',
+                        'rgba(158,158,158 ,1)',
+                        'rgba(96,125,139 ,1)',
+                        'rgba(14, 14, 180, 1)',
+                        'rgba(196, 249, 170, 1)',
+                        'rgba(249, 170, 170, 1)'
+                    ]
+                }
+                
+                ]
+            },
+            
+            options: opt
+        });
+    </script>
+
+    <!-- Bank Modal -->
+    <script>
+        var ctx = document.getElementById('bank1');
+        var label_bank = {{account_parent_bank}};
+        var container_bank1 = {{total_bank}};
+        var container_bank2 = {{total_bank_2019}};
+        var opt = { 
+                    scales: {
+                        xAxes: [{
+                            barPercentage: 0.5,
+                            barThickness: 20,
+                            maxBarThickness: 20,
+                            minBarLength: 2,
+                            gridLines: {
+                                offsetGridLines: true
+                            },
+                            ticks: {
+                                    fontSize: 4,
+                                    fontStyle: 'bold'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    plugins: {
+                        legend: false,
+                        title: false,
+                        datalabels: {
+                            align: 'top',
+                            anchor: 'end',
+                            color : 'black',
+                            font : {
+                                size : "8"
+                            }
+                        }
+                    }
+                };
+
+        var bank1 = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: label_bank,
+                datasets: [{
+                    label: '2019',
+                    data: container_bank2,
+                    backgroundColor: [
+                        'rgba(255,193,7 ,1)',
+                        'rgba(233,30,99 ,1)',
+                        'rgba(0,188,212 ,1)',
+                        'rgba(0,255,0 ,1)',
+                        'rgba(0, 34, 230, 1)',
+                        'rgba(139,136,120 ,1)',
+                        'rgba(0,128,128 ,1)',
+                        'rgba(156,39,176 ,1)',
+                        'rgba(0,100,0 ,1)',
+                        'rgba(121,85,72 ,1)',
+                        'rgba(158,158,158 ,1)',
+                        'rgba(96,125,139 ,1)',
+                        'rgba(14, 14, 180, 1)',
+                        'rgba(196, 249, 170, 1)',
+                        'rgba(249, 170, 170, 1)'
+                    ]
+                },
+                {
+                    label: '2020',
+                    data: container_bank1,
+                    backgroundColor: [
+                        'rgba(255,193,7 ,1)',
+                        'rgba(233,30,99 ,1)',
+                        'rgba(0,188,212 ,1)',
+                        'rgba(0,255,0 ,1)',
+                        'rgba(0, 34, 230, 1)',
+                        'rgba(139,136,120 ,1)',
+                        'rgba(0,128,128 ,1)',
+                        'rgba(156,39,176 ,1)',
+                        'rgba(0,100,0 ,1)',
+                        'rgba(121,85,72 ,1)',
+                        'rgba(158,158,158 ,1)',
+                        'rgba(96,125,139 ,1)',
+                        'rgba(14, 14, 180, 1)',
+                        'rgba(196, 249, 170, 1)',
+                        'rgba(249, 170, 170, 1)'
+                    ]
+                }
+                ]
+            },
+            options: opt
+        });
+    </script>
+
+    <!-- Pendapatan  -->
+    <script>
+        var ctx = document.getElementById('pendapatan');
+        var label_pendapatan = {{posting_date_pend}};
+        var container_pendapatan = {{total_pendapatan}}
+
+        var opt = { 
+                    scales: {
+                        xAxes: [{
+                            barPercentage: 0.5,
+                            barThickness: 35,
+                            maxBarThickness: 35,
+                            minBarLength: 2,
+                            gridLines: {
+                                offsetGridLines: true
+                            },
+                            ticks: {
+                                    fontSize: 13,
+                                    fontStyle: 'bold'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    plugins: {
+                        legend: false,
+                        title: false,
+                        datalabels: {
+                            align: 'top',
+                            anchor: 'end',
+                            color : 'black'
+                        }
+                    }
+                };
+
+        var pendapatan = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: label_pendapatan,
+                datasets: [{
+                    label: 'Pendapatan',
+                    data: container_pendapatan,
+                    backgroundColor: [
+                        'rgba(0,0,255,0.3)',
+                        'rgba(0, 0, 0, 0.5)',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                        'rgba(0,0,255,0.3)'
+                    ]
+                },
+                
+                ]
+            },
+            
+            options: opt
+        });
+    </script>
+
+    <!-- Pendapatan Modal -->
+    <script>
+    var ctx = document.getElementById('pendapatan1');
+    var label_pendapatan = {{posting_date_pend}};
+    var container_pendapatan = {{total_pendapatan}};
+        var opt = { 
+                    scales: {
+                        xAxes: [{
+                            barPercentage: 0.5,
+                            barThickness: 20,
+                            maxBarThickness: 20,
+                            minBarLength: 2,
+                            gridLines: {
+                                offsetGridLines: true
+                            },
+                            ticks: {
+                                    fontSize: 4,
+                                    fontStyle: 'bold'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    plugins: {
+                        legend: false,
+                        title: false,
+                        datalabels: {
+                            align: 'top',
+                            anchor: 'end',
+                            color : 'black',
+                            font : {
+                                size : "8"
+                            }
+                        }
+                    }
+                };
+
+            var pendapatan1 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: label_pendapatan,
+                datasets: [{
+                    label: 'Pendapatan',
+                    data: container_pendapatan,
+                    backgroundColor: [
+                    'rgba(0,0,255,0.3)',
+                        'rgba(0, 0, 0, 0.5)',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                            'rgba(0, 0, 0, 0.5);',
+                        'rgba(0,0,255,0.3)'
+                    ]
+                },
+                
+                ]
+            },
+            
+            options: opt
+        });
+    </script>
+
+    <!-- Employee  -->
+    <script>
+        var ctx = document.getElementById("employee");
+        var label_employee = {{date_of_joining}};
+        var container_employee = {{employee}};
+    
+        var opt = { 
+                    scales: {
+                        xAxes: [{
+                            barPercentage: 0.5,
+                            barThickness: 35,
+                            maxBarThickness: 35,
+                            minBarLength: 2,
+                            gridLines: {
+                                offsetGridLines: true
+                            },
+                            ticks: {
+                                    fontSize: 10,
+                                    fontStyle: 'bold'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    plugins: {
+                        legend: false,
+                        title: false,
+                        datalabels: {
+                            align: 'top',
+                            anchor: 'end',
+                            color : 'black'
+                        }
+                    }
+                };
+
+        var tagihan = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: label_employee,
+                datasets: [{
+                    label: 'Employee',
+                    data: container_employee,
+                    backgroundColor: [
+                        'rgba(0,0,255,0.3)',
+                        'rgba(0, 0, 0, 0.5)',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0,0,255,0.3)'
+                    ]
+                }]
+            },
+            options: opt
+        });
+    </script>
+
+    <!-- Employee Modal -->
+    <script>
+        var ctx = document.getElementById("employee1");
+        var label_employee = {{date_of_joining}};
+        var container_employee = {{employee}};
+        var opt = { 
+                    scales: {
+                        xAxes: [{
+                            barPercentage: 0.5,
+                            barThickness: 35,
+                            maxBarThickness: 35,
+                            minBarLength: 2,
+                            gridLines: {
+                                offsetGridLines: true
+                            },
+                            ticks: {
+                                    fontSize: 10,
+                                    fontStyle: 'bold'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    plugins: {
+                        legend: false,
+                        title: false,
+                        datalabels: {
+                            align: 'top',
+                            anchor: 'end',
+                            color : 'black'
+                        }
+                    }
+                };
+
+        var tagihan1 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: label_employee,
+                datasets: [{
+                    label: 'Employee',
+                    data: container_employee,
+                    backgroundColor: [
+                    'rgba(0,0,255,0.3)',
+                        'rgba(0, 0, 0, 0.5)',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0, 0, 0, 0.5);',
+                        'rgba(0,0,255,0.3)'
+                    ]
+                }]
+            },
+            options: opt
+        });
+    </script>
+
+   <!-- Pendapatan Beban  -->
+    <script>
+    var ctx = document.getElementById('pendapatanbeban');
+    var label_pendapatan_beban = ['2020', '2019']
+    var container_pendapatan = {{pendapatan}}
+    var container_beban = {{beban}}
+
+    var opt = { 
+                scales: {
+                    xAxes: [{
+                        barPercentage: 0.5,
+                        barThickness: 35,
+                        maxBarThickness: 35,
+                        minBarLength: 2,
+                        gridLines: {
+                            offsetGridLines: true
+                        },
+                        ticks: {
+                                fontSize: 15,
+                                fontStyle: 'bold'
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                plugins: {
+                    legend: false,
+                    title: false,
+                    datalabels: {
+                        align: 'top',
+                        anchor: 'end',
+                        color : 'black'
+                    }
+                }
+            };
+
+    var bank = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: label_pendapatan_beban,
+            datasets: [{
+                label: 'Pendapatan',
+                data: container_pendapatan,
+                backgroundColor: [
+                    'rgba(255,193,7 ,1)',
+                    'rgba(233,30,99 ,1)',
+                    'rgba(0,188,212 ,1)',
+                    'rgba(0,255,0 ,1)',
+                    'rgba(0, 34, 230, 1)',
+                    'rgba(139,136,120 ,1)',
+                    'rgba(0,128,128 ,1)',
+                    'rgba(156,39,176 ,1)',
+                    'rgba(0,100,0 ,1)',
+                    'rgba(121,85,72 ,1)',
+                    'rgba(158,158,158 ,1)',
+                    'rgba(96,125,139 ,1)',
+                    'rgba(14, 14, 180, 1)',
+                    'rgba(196, 249, 170, 1)',
+                    'rgba(249, 170, 170, 1)'
+                ]
+            },
+            {
+                label: 'Beban',
+                data: container_beban,
+                backgroundColor: [
+                    'rgba(255,193,7 ,1)',
+                    'rgba(233,30,99 ,1)',
+                    'rgba(0,188,212 ,1)',
+                    'rgba(0,255,0 ,1)',
+                    'rgba(0, 34, 230, 1)',
+                    'rgba(139,136,120 ,1)',
+                    'rgba(0,128,128 ,1)',
+                    'rgba(156,39,176 ,1)',
+                    'rgba(0,100,0 ,1)',
+                    'rgba(121,85,72 ,1)',
+                    'rgba(158,158,158 ,1)',
+                    'rgba(96,125,139 ,1)',
+                    'rgba(14, 14, 180, 1)',
+                    'rgba(196, 249, 170, 1)',
+                    'rgba(249, 170, 170, 1)'
+                ]
+            },
+            
+            
+            
+            ]
+        },
+        
+        options: opt
+    });
+    </script>
+
+<!-- Pendapatan Beban -->
+    <script>
+    var ctx = document.getElementById('pendapatanbeban1');
+    var label_pendapatan_beban = ['2020', '2019']
+    var container_pendapatan = {{pendapatan}} 
+    var container_beban = {{beban}}
+        var opt = { 
+                    scales: {
+                        xAxes: [{
+                            barPercentage: 0.5,
+                            barThickness: 20,
+                            maxBarThickness: 20,
+                            minBarLength: 2,
+                            gridLines: {
+                                offsetGridLines: true
+                            },
+                            ticks: {
+                                    fontSize: 15,
+                                    fontStyle: 'bold'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    plugins: {
+                        legend: false,
+                        title: false,
+                        datalabels: {
+                            align: 'top',
+                            anchor: 'end',
+                            color : 'black',
+                            font : {
+                                size : "8"
+                            }
+                        }
+                    }
+                };
+
+        var bank1 = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: label_pendapatan_beban,
+                datasets: [{
+                    label: 'Pendapatan',
+                    data: container_pendapatan,
+                    backgroundColor: [
+                        'rgba(255,193,7 ,1)',
+                        'rgba(233,30,99 ,1)',
+                        'rgba(0,188,212 ,1)',
+                        'rgba(0,255,0 ,1)',
+                        'rgba(0, 34, 230, 1)',
+                        'rgba(139,136,120 ,1)',
+                        'rgba(0,128,128 ,1)',
+                        'rgba(156,39,176 ,1)',
+                        'rgba(0,100,0 ,1)',
+                        'rgba(121,85,72 ,1)',
+                        'rgba(158,158,158 ,1)',
+                        'rgba(96,125,139 ,1)',
+                        'rgba(14, 14, 180, 1)',
+                        'rgba(196, 249, 170, 1)',
+                        'rgba(249, 170, 170, 1)'
+                    ]
+                },
+                {
+                    label: 'Beban',
+                    data: container_beban,
+                    backgroundColor: [
+                        'rgba(255,193,7 ,1)',
+                        'rgba(233,30,99 ,1)',
+                        'rgba(0,188,212 ,1)',
+                        'rgba(0,255,0 ,1)',
+                        'rgba(0, 34, 230, 1)',
+                        'rgba(139,136,120 ,1)',
+                        'rgba(0,128,128 ,1)',
+                        'rgba(156,39,176 ,1)',
+                        'rgba(0,100,0 ,1)',
+                        'rgba(121,85,72 ,1)',
+                        'rgba(158,158,158 ,1)',
+                        'rgba(96,125,139 ,1)',
+                        'rgba(14, 14, 180, 1)',
+                        'rgba(196, 249, 170, 1)',
+                        'rgba(249, 170, 170, 1)'
+                    ]
+                }
+                ]
+            },
+            options: opt
+        });
+    </script>
+
+</script>
+
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.js"
+    integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+    crossorigin="anonymous"></script>
+
+    {% endblock %}
+        
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+</body>
+
+</html>
+{% endblock %}
